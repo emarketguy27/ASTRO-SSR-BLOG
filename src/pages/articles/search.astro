@@ -1,0 +1,39 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+import SearchForm from "../../components/SearchForm.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+const query: string | null = Astro.url.searchParams.get("query");
+
+const allBlogArticles: CollectionEntry<"blog">[] = await getCollection("blog");
+
+// Filter output articles based on search query
+const searchResults = allBlogArticles.filter((article) => {
+  const titleMatch: boolean = article.data.title.includes(
+    query!.toLocaleLowerCase()
+  );
+
+  const bodyMatch: boolean = article.body.includes(query!.toLocaleLowerCase());
+
+  const slugMatch: boolean = article.slug.includes(query!.toLocaleLowerCase());
+
+  return titleMatch || bodyMatch || slugMatch;
+});
+---
+
+<MainLayout title="Search Results">
+  <a
+    href="/articles"
+    class="inline-block bg-gray-100 p-2 mb-6 hover:bg-indigo-500 hover:text-white"
+    >Back To Articles</a
+  >
+  <SearchForm />
+  <br />
+  <h1 text-2xl pb-3>Results for <strong>{query}</strong></h1>
+  <hr />
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {searchResults.map((article) => <ArticleCard article={article} />)}
+  </div>
+</MainLayout>

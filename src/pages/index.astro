@@ -1,0 +1,46 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import SearchForm from "../components/SearchForm.astro";
+import MostRecentArticle from "../components/MostRecentArticle.astro";
+
+// Get Collection of Articles
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { HOMEPAGE_ARTICLE_LIMIT } from "../constants";
+import ArticleCard from "../components/ArticleCard.astro";
+
+const allBlogArticles: CollectionEntry<"blog">[] = (
+  await getCollection("blog")
+).sort(
+  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Split articles into most recent - then the remaining
+const mostRecentArticle: CollectionEntry<"blog"> = allBlogArticles[0];
+const otherArticles: CollectionEntry<"blog"> = allBlogArticles.slice(1);
+---
+
+<MainLayout>
+  <!-- Top Grid -->
+  <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+    <div>
+      <h1 class="text-5xl font-bold mt-4 mb-8 leading-tight xl:text-6xl">
+        Articles, Stories & Tutorials for Tech People
+      </h1>
+      <!-- Search Form -->
+      <SearchForm />
+    </div>
+    <!-- Most Recent Article -->
+    <MostRecentArticle article={mostRecentArticle} />
+  </div>
+
+  <!-- Main Grid -->
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      otherArticles
+        .slice(0, HOMEPAGE_ARTICLE_LIMIT)
+        .map((article: any) => <ArticleCard article={article} />)
+    }
+  </div>
+</MainLayout>

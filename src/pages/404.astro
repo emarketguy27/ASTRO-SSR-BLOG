@@ -1,0 +1,18 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { Image } from "astro:assets";
+import error from "../images/error-404.png";
+---
+
+<MainLayout title="404 - Page Not Found">
+  <div class="flex flex-col items-center gap-7">
+    <Image src={error} alt="404" height={250} width={250} class="mt-10/" />
+    <h1 class="text-5xl">Page Not Found</h1>
+    <p class="text-2xl mb-10">Sorry, that page does not exist</p>
+    <a
+      href="/"
+      class="inline-block mt-10 text-white px-3 py-2 bg-indigo-700 rounded-lg border border-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300"
+      >Head back to safety...</a
+    >
+  </div>
+</MainLayout>
