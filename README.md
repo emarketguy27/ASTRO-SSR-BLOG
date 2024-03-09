@@ -1,4 +1,6 @@
 # Astro Starter Kit: Minimal
+See the final deploy on Vercel here --- https://astro-ssr-blog.vercel.app/
+
 
 ```sh
 npm create astro@latest -- --template minimal
