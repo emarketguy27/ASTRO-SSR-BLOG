@@ -1,13 +1,13 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import SearchForm from "../components/SearchForm.astro";
+import ArticleCard from "../components/ArticleCard.astro";
 import MostRecentArticle from "../components/MostRecentArticle.astro";
+import { HOMEPAGE_ARTICLE_LIMIT } from "../constants";
 
 // Get Collection of Articles
 import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
-import { HOMEPAGE_ARTICLE_LIMIT } from "../constants";
-import ArticleCard from "../components/ArticleCard.astro";
+import type { CollectionEntry, CollectionKey } from "astro:content";
 
 const allBlogArticles: CollectionEntry<"blog">[] = (
   await getCollection("blog")
@@ -18,7 +18,7 @@ const allBlogArticles: CollectionEntry<"blog">[] = (
 
 // Split articles into most recent - then the remaining
 const mostRecentArticle: CollectionEntry<"blog"> = allBlogArticles[0];
-const otherArticles: CollectionEntry<"blog"> = allBlogArticles.slice(1);
+const otherArticles: CollectionEntry<"blog">[] = allBlogArticles.slice(1);
 ---
 
 <MainLayout>
@@ -40,7 +40,7 @@ const otherArticles: CollectionEntry<"blog"> = allBlogArticles.slice(1);
     {
       otherArticles
         .slice(0, HOMEPAGE_ARTICLE_LIMIT)
-        .map((article: any) => <ArticleCard article={article} />)
+        .map((article) => <ArticleCard article={article} />)
     }
   </div>
 </MainLayout>
